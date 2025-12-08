@@ -17,6 +17,11 @@ import ChefRoute from "./ChefRoute";
 import OrderRequests from "../Pages/Dashboard/Chef/OrderRequests/OrderRequests";
 import PaymentSuccess from "../Pages/Dashboard/Pyment/PaymentSuccess";
 import MyReviews from "../Pages/Dashboard/MyReview/MyReviews";
+import FavoriteMeals from "../Pages/Dashboard/FavouriteMeals/FavouriteMeals";
+import CreateMeal from "../Pages/Dashboard/Chef/CreateMeal/CreateMeal";
+import MyMeals from "../Pages/Dashboard/Chef/MyMeals/MyMeals";
+import UpdateMeal from "../Pages/Dashboard/Chef/UpdateMeal/UpdateMeal";
+import ManageUsers from "../Pages/Dashboard/Admin/ManageUser/ManageUser";
 
 export const router = createBrowserRouter([
   {
@@ -50,7 +55,8 @@ export const router = createBrowserRouter([
       {
         path: "/profile",
         element: <PrivateRoute><ProfilePage></ProfilePage></PrivateRoute>,
-      }
+      },
+      
 
     ]
   },
@@ -86,7 +92,27 @@ export const router = createBrowserRouter([
       {
         path:'reviews',
         Component:MyReviews
-      }
+      },
+        {
+          path:'favorites',
+          element:<PrivateRoute><FavoriteMeals></FavoriteMeals></PrivateRoute>
+        },
+        {
+          path:'create-meal',
+          element:<ChefRoute><CreateMeal></CreateMeal></ChefRoute>
+        },
+        {
+          path:'my-meals',
+          element:<ChefRoute><MyMeals></MyMeals></ChefRoute>
+        },
+        {
+          path: "update-meal/:id",
+          element:<ChefRoute><UpdateMeal></UpdateMeal></ChefRoute>
+        },
+        {
+          path: "manage-users",
+          element:<AdminRoute><ManageUsers></ManageUsers></AdminRoute>
+        }
     ]
     }, // <-- private Meal Details
 

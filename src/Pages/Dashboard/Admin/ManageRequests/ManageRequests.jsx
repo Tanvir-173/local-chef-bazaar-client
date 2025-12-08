@@ -1,6 +1,5 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-
 import Swal from "sweetalert2";
 import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
 
@@ -16,17 +15,20 @@ const ManageRequests = () => {
     },
   });
 
-  // Approve/reject handler
   const handleAction = async (id, action) => {
-    const res = await axiosSecure.patch(`/role-request/${id}`, { action });
-
-    if (res.data.success) {
-      Swal.fire(
-        "Success!",
-        `Request has been ${action === "approve" ? "approved" : "rejected"}`,
-        "success"
-      );
-      refetch();
+    try {
+      const res = await axiosSecure.patch(`/role-request/${id}`, { action });
+      if (res.data.success) {
+        Swal.fire(
+          "Success!",
+          `Request has been ${action === "approve" ? "approved" : "rejected"}`,
+          "success"
+        );
+        refetch();
+      }
+    } catch (err) {
+      console.error(err);
+      Swal.fire("Error", "Action failed. Please try again.", "error");
     }
   };
 
@@ -38,39 +40,56 @@ const ManageRequests = () => {
         <p className="text-gray-600 text-black">No pending requests</p>
       )}
 
-      <div className="space-y-4">
-        {requests.map((req) => (
-          <div
-            key={req._id}
-            className="p-4 bg-white shadow rounded border flex justify-between items-center"
-          >
-            <div className="text-black">
-              <p><strong>Name:</strong> {req.userName}</p>
-              <p><strong>Email:</strong> {req.userEmail}</p>
-              <p><strong>Request Type:</strong> {req.requestType}</p>
-              <p><strong>Status:</strong> {req.requestStatus}</p>
-              <p><strong>Time:</strong> {new Date(req.requestTime).toLocaleString()}</p>
-            </div>
-
-            {req.requestStatus === "pending" && (
-              <div className="space-x-3">
-                <button
-                  onClick={() => handleAction(req._id, "approve")}
-                  className="px-4 py-2 bg-green-600 text-white rounded"
-                >
-                  Approve
-                </button>
-
-                <button
-                  onClick={() => handleAction(req._id, "reject")}
-                  className="px-4 py-2 bg-red-600 text-white rounded"
-                >
-                  Reject
-                </button>
-              </div>
-            )}
-          </div>
-        ))}
+      <div className="overflow-x-auto">
+        <table className="min-w-full border border-gray-300">
+          <thead className="bg-gray-100 text-black">
+            <tr className="text-center">
+              <th className="px-4 py-2 border">Name</th>
+              <th className="px-4 py-2 border">Email</th>
+              <th className="px-4 py-2 border">Request Type</th>
+              <th className="px-4 py-2 border">Status</th>
+              <th className="px-4 py-2 border">Request Time</th>
+              <th className="px-4 py-2 border">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {requests.map((req) => (
+              <tr key={req._id} className="text-center text-black">
+                <td className="px-4 py-2 border">{req.userName || "N/A"}</td>
+                <td className="px-4 py-2 border">{req.userEmail}</td>
+                <td className="px-4 py-2 border capitalize">{req.requestType}</td>
+                <td className="px-4 py-2 border capitalize">{req.requestStatus}</td>
+                <td className="px-4 py-2 border">
+                  {new Date(req.requestTime).toLocaleString()}
+                </td>
+                <td className="px-4 py-2 border space-x-2">
+                  <button
+                    className={`px-3 py-1 rounded text-white ${
+                      req.requestStatus === "pending"
+                        ? "bg-green-600 hover:bg-green-700"
+                        : "bg-gray-400 cursor-not-allowed"
+                    }`}
+                    onClick={() => handleAction(req._id, "approve")}
+                    disabled={req.requestStatus !== "pending"}
+                  >
+                    Approve
+                  </button>
+                  <button
+                    className={`px-3 py-1 rounded text-white ${
+                      req.requestStatus === "pending"
+                        ? "bg-red-600 hover:bg-red-700"
+                        : "bg-gray-400 cursor-not-allowed"
+                    }`}
+                    onClick={() => handleAction(req._id, "reject")}
+                    disabled={req.requestStatus !== "pending"}
+                  >
+                    Reject
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );

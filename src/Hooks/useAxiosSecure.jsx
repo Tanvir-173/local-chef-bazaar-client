@@ -14,6 +14,7 @@ const useAxiosSecure = () => {
     const navigate = useNavigate()
 
     useEffect(() =>{
+        
 
          const reqInterceptor = axiosSecure.interceptors.request.use(config=>{
             config.headers.Authorization =`Bearer ${user?.accessToken}`
