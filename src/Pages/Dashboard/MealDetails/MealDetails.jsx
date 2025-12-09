@@ -13,6 +13,7 @@ const MealDetails = () => {
   const queryClient = useQueryClient();
   const { user } = UseAuth();
   const { role } = useRole();
+  console.log(role)
 
   const [showReviewBox, setShowReviewBox] = useState(false);
 
@@ -166,12 +167,12 @@ const MealDetails = () => {
         </button>
       </div>
 
-      {/* Admin Option */}
+      {/* Admin Option
       {role === "admin" && (
         <button className="mt-4 ml-3 px-6 py-3 bg-red-600 text-white rounded-lg shadow hover:bg-red-700">
           Edit Meal
         </button>
-      )}
+      )} */}
 
       {/* ====================== */}
       {/* ⭐ Review Section */}
@@ -227,16 +228,16 @@ const MealDetails = () => {
 
                 reviewMutation.mutate({
                   foodId: id,
+                  foodName: meal.foodName,   //  Added
                   reviewerName: user.displayName,
                   reviewerImage: user.photoURL,
-                  userEmail: user.email,       // <-- add this line
+                  userEmail: user.email,
                   rating: Number(rating),
                   comment,
-                  date: new Date(),
                 });
-
               }}
             >
+
               <label className="block mb-2 text-black">Rating (1-5):</label>
               <input
                 type="number"
