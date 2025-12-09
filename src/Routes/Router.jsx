@@ -22,6 +22,7 @@ import CreateMeal from "../Pages/Dashboard/Chef/CreateMeal/CreateMeal";
 import MyMeals from "../Pages/Dashboard/Chef/MyMeals/MyMeals";
 import UpdateMeal from "../Pages/Dashboard/Chef/UpdateMeal/UpdateMeal";
 import ManageUsers from "../Pages/Dashboard/Admin/ManageUser/ManageUser";
+import PlatformStats from "../Pages/Dashboard/Admin/PlatformStats/PlatformStats";
 
 export const router = createBrowserRouter([
   {
@@ -112,6 +113,10 @@ export const router = createBrowserRouter([
         {
           path: "manage-users",
           element:<AdminRoute><ManageUsers></ManageUsers></AdminRoute>
+        },
+        {
+          path:"statistics",
+          element:<AdminRoute><PlatformStats></PlatformStats></AdminRoute>
         }
     ]
     }, // <-- private Meal Details
