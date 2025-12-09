@@ -7,9 +7,8 @@ import Register from "../Pages/Auth/Register/Register";
 import PrivateRoute from "./PrivateRoute";
 import MealDetails from "../Pages/Dashboard/MealDetails/MealDetails";
 import OrderPage from "../Pages/Private/OrderPage/OrderPage";
-import ProfilePage from "../Pages/Private/ProfilePage/ProfilePage";
-import DashboardLayout from "../Pages/Dashboard/DashboardLayout/DashboardLayout";
 import UserProfile from "../Pages/Dashboard/UserProfile/UserProfile";
+import DashboardLayout from "../Pages/Dashboard/DashboardLayout/DashboardLayout";
 import Myorders from "../Pages/Dashboard/MyOrders/Myorders";
 import AdminRoute from "./AdminRoute";
 import ManageRequests from "../Pages/Dashboard/Admin/ManageRequests/ManageRequests";
@@ -58,10 +57,7 @@ export const router = createBrowserRouter([
         path: "/order",
         element: <PrivateRoute><OrderPage></OrderPage></PrivateRoute>
       },
-      {
-        path: "/profile",
-        element: <PrivateRoute><ProfilePage></ProfilePage></PrivateRoute>,
-      },
+     
       {
         path:'meals',
         element:<PrivateRoute><Meals></Meals></PrivateRoute>
@@ -80,10 +76,7 @@ export const router = createBrowserRouter([
       path:"meals/:id", 
       Component:MealDetails
     },
-      {
-           path: "profile",
-           Compontent:UserProfile 
-      },
+     
       {
         path:"orders",
         Component:Myorders
@@ -127,7 +120,13 @@ export const router = createBrowserRouter([
         {
           path:"statistics",
           element:<AdminRoute><PlatformStats></PlatformStats></AdminRoute>
+        },
+        {
+          path:'profile',
+          element:<PrivateRoute><UserProfile></UserProfile></PrivateRoute>
+
         }
+
     ]
     }, // <-- private Meal Details
 

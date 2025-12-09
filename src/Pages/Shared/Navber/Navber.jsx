@@ -63,14 +63,14 @@ const Navber = () => {
               >
                 Dashboard
               </NavLink>
-              <NavLink
+              {/* <NavLink
                 to="/profile"
                 className={({ isActive }) =>
                   isActive ? 'text-yellow-400 font-semibold' : 'hover:text-yellow-400'
                 }
               >
                 Profile
-              </NavLink>
+              </NavLink> */}
             </>
           )}
         </div>
