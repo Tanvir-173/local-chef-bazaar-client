@@ -24,6 +24,7 @@ import UpdateMeal from "../Pages/Dashboard/Chef/UpdateMeal/UpdateMeal";
 import ManageUsers from "../Pages/Dashboard/Admin/ManageUser/ManageUser";
 import PlatformStats from "../Pages/Dashboard/Admin/PlatformStats/PlatformStats";
 import ErrorPage from "../Pages/Shared/ErrorPage/ErrorPage";
+import Meals from "../Pages/Home/Home/Meals/Meals";
 
 export const router = createBrowserRouter([
   {
@@ -34,7 +35,8 @@ export const router = createBrowserRouter([
       {
         index: true,
         Component: Home
-      }
+      },
+      
     ]
 
   },
@@ -60,6 +62,10 @@ export const router = createBrowserRouter([
         path: "/profile",
         element: <PrivateRoute><ProfilePage></ProfilePage></PrivateRoute>,
       },
+      {
+        path:'meals',
+        element:<PrivateRoute><Meals></Meals></PrivateRoute>
+      }
       
 
     ]

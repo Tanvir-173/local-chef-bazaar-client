@@ -1,20 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import UseAuth from "../../../../Hooks/UseAuth";
- // your auth hook
+import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
 
 const Meals = () => {
   const [meals, setMeals] = useState([]);
   const [sortAsc, setSortAsc] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const navigate = useNavigate();
-  const { user } = UseAuth(); // check if user is logged in
+  const { user } = UseAuth();
+  const axiosSecure = useAxiosSecure();
+
+ const fetchMeals = async (page = 1) => {
+  try {
+    const res = await axiosSecure.get("/meals", {
+      params: { page, limit: 10 },
+    });
+    setMeals(res.data.meals || []); // ensure meals is always an array
+    setTotalPages(res.data.totalPages || 1);
+    setCurrentPage(res.data.currentPage || 1);
+  } catch (err) {
+    console.error("Error fetching meals:", err);
+    setMeals([]); // fallback
+  }
+};
+
 
   useEffect(() => {
-    fetch("http://localhost:3000/meals") // call your backend API
-      .then((res) => res.json())
-      .then((data) => setMeals(data))
-      .catch((err) => console.error("Error fetching meals:", err));
-  }, []);
+    fetchMeals(currentPage);
+  }, [currentPage]);
 
   const handleSort = () => {
     const sorted = [...meals].sort((a, b) =>
@@ -29,6 +44,12 @@ const Meals = () => {
       navigate(`/dashboard/meals/${id}`);
     } else {
       navigate("/login");
+    }
+  };
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
     }
   };
 
@@ -65,6 +86,33 @@ const Meals = () => {
             </button>
           </div>
         ))}
+      </div>
+
+      {/* Pagination */}
+      <div className="flex justify-center items-center mt-8 space-x-2">
+        <button
+          onClick={() => handlePageChange(currentPage - 1)}
+          disabled={currentPage === 1}
+          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50 text-black"
+        >
+          Prev
+        </button>
+        {Array.from({ length: totalPages }, (_, i) => (
+          <button
+            key={i + 1}
+            onClick={() => handlePageChange(i + 1)}
+            className={`px-3 py-1 rounded ${currentPage === i + 1 ? 'bg-blue-500 text-black' : 'bg-gray-200 text-black'}`}
+          >
+            {i + 1}
+          </button>
+        ))}
+        <button
+          onClick={() => handlePageChange(currentPage + 1)}
+          disabled={currentPage === totalPages}
+          className="px-3 py-1 bg-gray-200 rounded disabled:opacity-50 text-black"
+        >
+          Next
+        </button>
       </div>
     </div>
   );
