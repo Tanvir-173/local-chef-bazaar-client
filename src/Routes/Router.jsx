@@ -23,11 +23,13 @@ import MyMeals from "../Pages/Dashboard/Chef/MyMeals/MyMeals";
 import UpdateMeal from "../Pages/Dashboard/Chef/UpdateMeal/UpdateMeal";
 import ManageUsers from "../Pages/Dashboard/Admin/ManageUser/ManageUser";
 import PlatformStats from "../Pages/Dashboard/Admin/PlatformStats/PlatformStats";
+import ErrorPage from "../Pages/Shared/ErrorPage/ErrorPage";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: RootLayout,
+    errorElement:<ErrorPage/>,
     children: [
       {
         index: true,
@@ -39,6 +41,7 @@ export const router = createBrowserRouter([
   {
     path: '/',
     Component: AuthLayout,
+    errorElement:<ErrorPage/>,
     children: [
       {
         path: 'login',
@@ -64,6 +67,7 @@ export const router = createBrowserRouter([
 
   {
     path: "dashboard",
+    errorElement:<ErrorPage/>,
     element:<PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
     children: [
       {
