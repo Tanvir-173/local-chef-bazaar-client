@@ -68,6 +68,31 @@ const MealDetails = () => {
   // ==========================
   // ❤️ Add to Favorites
   // ==========================
+  // const addFavorite = async () => {
+  //   if (!user) return navigate("/login");
+
+  //   const favoriteData = {
+  //     userEmail: user.email,
+  //     mealId: meal._id,
+  //     mealName: meal.foodName,
+  //     chefId: meal.chefId,
+  //     chefName: meal.chefName,
+  //     price: meal.price,
+  //     addedTime: new Date(),
+  //   };
+
+  //   try {
+  //     const res = await axiosSecure.post("/favorites", favoriteData);
+
+  //     if (res.data.insertedId) {
+  //       Swal.fire("Added!", "Meal added to your favorites.", "success");
+  //     } else {
+  //       Swal.fire("Info", "This meal is already in favorites.", "info");
+  //     }
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
   const addFavorite = async () => {
     if (!user) return navigate("/login");
 
@@ -84,15 +109,17 @@ const MealDetails = () => {
     try {
       const res = await axiosSecure.post("/favorites", favoriteData);
 
-      if (res.data.insertedId) {
+      if (res.data.inserted) {
         Swal.fire("Added!", "Meal added to your favorites.", "success");
       } else {
-        Swal.fire("Info", "This meal is already in favorites.", "info");
+        Swal.fire("Info", res.data.message || "This meal is already in favorites.", "info");
       }
     } catch (err) {
       console.error(err);
+      Swal.fire("Error", "Failed to add favorite. Try again later.", "error");
     }
   };
+
 
   if (isLoading)
     return <p className="text-center mt-10 text-xl">Loading...</p>;
