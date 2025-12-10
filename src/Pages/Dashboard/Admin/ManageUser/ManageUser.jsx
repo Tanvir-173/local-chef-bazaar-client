@@ -25,7 +25,7 @@ const ManageUsers = () => {
     }
 
     try {
-      const res = await axios.get("http://localhost:3000/admin/users", {
+      const res = await axios.get("https://local-chef-bazaar.vercel.app/admin/users", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUsers(res.data);
@@ -50,7 +50,7 @@ const ManageUsers = () => {
 
     try {
       const res = await axios.patch(
-        `http://localhost:3000/admin/users/fraud/${id}`,
+        `https://local-chef-bazaar.vercel.app/admin/users/fraud/${id}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );

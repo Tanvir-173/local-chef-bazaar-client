@@ -5,6 +5,8 @@ import { Link, useLocation, useNavigate } from 'react-router';
 import SocialLogin from '../SocialLogin/SocialLogin';
 import axios from 'axios';
 import useAxiosSecure from '../../../Hooks/useAxiosSecure';
+import toast from "react-hot-toast";
+
 
 const Register = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
@@ -15,42 +17,87 @@ const Register = () => {
 
     // Save user to DB
     const saveUserToDB = async (user) => {
-      try {
-        await axiosSecure.post("/users", {
-          name: user.displayName || "Unknown",
-          email: user.email,
-          photoURL: user.photoURL || "",
-        });
-      } catch (err) {
-        console.log("Failed to save user:", err);
-      }
+        try {
+            await axiosSecure.post("/users", {
+                name: user.displayName || "Unknown",
+                email: user.email,
+                photoURL: user.photoURL || "",
+            });
+        } catch (err) {
+            console.log("Failed to save user:", err);
+        }
     };
 
+    // const handleRegistration = (data) => {
+    //     const profileImg = data.photo[0];
+
+    //     registerUser(data.email, data.password)
+    //         .then(result => {
+    //             const formData = new FormData();
+    //             formData.append('image', profileImg);
+
+    //             const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`
+
+    //             axios.post(image_API_URL, formData)
+    //                 .then(async res => {
+    //                     const userProfile = {
+    //                         displayName: data.name,
+    //                         photoURL: res.data.data.url
+    //                     }
+
+    //                     await updateUserProfile(userProfile);
+    //                     await saveUserToDB(result.user); // save user to DB
+    //                     navigate(location.state || '/');
+    //                 })
+    //                 .catch(error => console.log(error))
+    //         })
+    //         .catch(error => console.log(error))
+    // }
+
     const handleRegistration = (data) => {
-        const profileImg = data.photo[0];
+    const profileImg = data.photo[0];
 
-        registerUser(data.email, data.password)
-            .then(result => {
-                const formData = new FormData();
-                formData.append('image', profileImg);
+    registerUser(data.email, data.password)
+        .then(result => {
+            toast.success("Registration successful!");
 
-                const image_API_URL = `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`
+            // Upload image
+            const formData = new FormData();
+            formData.append('image', profileImg);
 
-                axios.post(image_API_URL, formData)
-                    .then(async res => {
-                        const userProfile = {
-                            displayName: data.name,
-                            photoURL: res.data.data.url
-                        }
+            const image_API_URL =
+                `https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_image_host_key}`;
 
-                        await updateUserProfile(userProfile);
-                        await saveUserToDB(result.user); // save user to DB
-                        navigate(location.state || '/');
-                    })
-                    .catch(error => console.log(error))
-            })
-            .catch(error => console.log(error))
-    }
+            axios.post(image_API_URL, formData)
+                .then(async res => {
+                    const userProfile = {
+                        displayName: data.name,
+                        photoURL: res.data.data.url
+                    };
+
+                    await updateUserProfile(userProfile);
+                    await saveUserToDB(result.user);
+
+                    toast.success("Profile updated!");
+                    navigate(location.state || '/');
+                })
+                .catch(error => {
+                    console.log(error);
+                    toast.error("Image upload failed!");
+                });
+        })
+        .catch(error => {
+            // Email already exists
+            if (error.code === "auth/email-already-in-use") {
+                toast.error("Email already in use!");
+            } else {
+                toast.error("Registration failed!");
+            }
+
+            console.error(error);
+        });
+};
+
 
     return (
         <div className="card bg-base-100 w-full mx-auto max-w-sm shrink-0 shadow-2xl">
@@ -71,12 +118,32 @@ const Register = () => {
                     {errors.email && <p className='text-red-500'>Email is required.</p>}
 
                     <label className="label">Password</label>
-                    <input type="password" {...register('password', {
+                    {/* <input type="password" {...register('password', {
                         required: true,
                         minLength: 6,
                         pattern: /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/
                     })} className="input" placeholder="Password" />
-                    {errors.password && <p className='text-red-500'>Invalid password.</p>}
+                    {errors.password && <p className='text-red-500'>Invalid password.</p>} */}
+                    {/* <label className="label">Password</label> */}
+
+                    <input
+                        type="password"
+                        {...register('password', {
+                            required: true,
+                            minLength: 6
+                        })}
+                        className="input"
+                        placeholder="Password"
+                    />
+
+                    {errors.password?.type === "minLength" && (
+                        <p className='text-red-500'>Password must be at least 6 characters long.</p>
+                    )}
+
+                    {errors.password?.type === "required" && (
+                        <p className='text-red-500'>Password is required.</p>
+                    )}
+
 
                     <div><a className="link link-hover">Forgot password?</a></div>
                     <button className="btn btn-neutral mt-4">Register</button>

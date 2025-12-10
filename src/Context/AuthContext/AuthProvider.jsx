@@ -17,6 +17,7 @@
 // };
 
 // export default AuthProvider;
+import { auth } from '../../Firebase/firebase.init';
 import { AuthContext } from './AuthContext';
 import { 
   createUserWithEmailAndPassword, 
@@ -24,7 +25,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile
 } from "firebase/auth";
-import { auth } from '../../Firebase/firebase.init';
+
 
 const AuthProvider = ({ children }) => {
 
