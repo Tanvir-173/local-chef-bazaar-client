@@ -2,6 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import UseAuth from "../../../../Hooks/UseAuth";
 import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+
+
 
 const Meals = () => {
   const [meals, setMeals] = useState([]);
@@ -76,7 +80,7 @@ const Meals = () => {
             <h2 className="text-xl font-semibold mt-3">{meal.foodName}</h2>
             <p>Chef: {meal.chefName} ({meal.chefId})</p>
             <p>Price: ${meal.price}</p>
-            <p>Rating: ⭐ {meal.rating}</p>
+            <p>Rating: <FontAwesomeIcon className="text-yellow-500" icon={faStar} /> {meal.rating}</p>
             <p>Delivery Area: {meal.deliveryArea}</p>
             <button
               onClick={() => handleViewDetails(meal._id)}

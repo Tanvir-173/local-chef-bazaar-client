@@ -16,7 +16,7 @@ const Login = () => {
 
   const { register, handleSubmit, formState: { errors } } = useForm();
 
-  // ✅ Save user to DB
+  //  Save user to DB
   const saveUserToDB = async (user) => {
     try {
       await axiosSecure.post("/users", {

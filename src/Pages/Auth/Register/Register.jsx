@@ -13,7 +13,7 @@ const Register = () => {
     const navigate = useNavigate();
     const axiosSecure = useAxiosSecure();
 
-    // ✅ Save user to DB
+    // Save user to DB
     const saveUserToDB = async (user) => {
       try {
         await axiosSecure.post("/users", {

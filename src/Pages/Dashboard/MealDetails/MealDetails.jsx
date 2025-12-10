@@ -5,6 +5,9 @@ import useRole from "../../../Hooks/useRole";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import UseAuth from "../../../Hooks/UseAuth";
 import Swal from "sweetalert2";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faStar } from "@fortawesome/free-solid-svg-icons";
+import { faHeart } from "@fortawesome/free-solid-svg-icons";
 
 const MealDetails = () => {
   const { id } = useParams();
@@ -18,7 +21,7 @@ const MealDetails = () => {
   const [showReviewBox, setShowReviewBox] = useState(false);
 
   // ==========================
-  // 🔥 Fetch Meal Details
+  //  Fetch Meal Details
   // ==========================
   const { data: meal, isLoading } = useQuery({
     queryKey: ["meal-details", id],
@@ -41,7 +44,7 @@ const MealDetails = () => {
   };
 
   // ==========================
-  // 🔥 Fetch Reviews for This Meal
+  //  Fetch Reviews for This Meal
   // ==========================
   const { data: reviews = [] } = useQuery({
     queryKey: ["reviews", id],
@@ -52,7 +55,7 @@ const MealDetails = () => {
   });
 
   // ==========================
-  // ⭐ Add Review Mutation
+  //  Add Review Mutation
   // ==========================
   const reviewMutation = useMutation({
     mutationFn: async (reviewData) => {
@@ -67,7 +70,7 @@ const MealDetails = () => {
   });
 
   // ==========================
-  // ❤️ Add to Favorites
+  //  Add to Favorites
   // ==========================
   // const addFavorite = async () => {
   //   if (!user) return navigate("/login");
@@ -128,7 +131,7 @@ const MealDetails = () => {
   return (
     <div className="max-w-5xl mx-auto p-6">
       {/* ====================== */}
-      {/* 🔥 Meal Information */}
+      {/*  Meal Information */}
       {/* ====================== */}
       <h1 className="text-4xl font-bold mb-4">{meal.foodName}</h1>
 
@@ -142,7 +145,7 @@ const MealDetails = () => {
         <p><strong>Chef Name:</strong> {meal.chefName}</p>
         <p><strong>Chef ID:</strong> {meal.chefId}</p>
         <p><strong>Price:</strong> ${meal.price}</p>
-        <p><strong>Rating:</strong> ⭐ {meal.rating}</p>
+        <p><strong>Rating:</strong> <FontAwesomeIcon className="text-yellow-500" icon={faStar} /> {meal.rating}</p>
         <p><strong>Delivery Area:</strong> {meal.deliveryArea}</p>
         <p><strong>Estimated Delivery Time:</strong> {meal.estimatedTime} mins</p>
         <p><strong>Chef Experience:</strong> {meal.experience} years</p>
@@ -163,7 +166,7 @@ const MealDetails = () => {
           onClick={addFavorite}
           className="px-6 py-3 bg-pink-600 hover:bg-pink-700 text-white font-semibold rounded-lg shadow"
         >
-          ❤️ Add to Favorite
+          <FontAwesomeIcon className="text-red-600" icon={faHeart} /> Add to Favorite
         </button>
       </div>
 
@@ -175,7 +178,7 @@ const MealDetails = () => {
       )} */}
 
       {/* ====================== */}
-      {/* ⭐ Review Section */}
+      {/*  Review Section */}
       {/* ====================== */}
       <div className="mt-10 p-6 bg-white rounded-xl shadow">
         <h2 className="text-2xl font-bold mb-4 text-black">Reviews</h2>
@@ -192,7 +195,7 @@ const MealDetails = () => {
                 />
                 <div>
                   <p className="font-bold text-black">{rev.reviewerName}</p>
-                  <p className="text-yellow-500">⭐ {rev.rating}</p>
+                  <p className="text-yellow-500"> <FontAwesomeIcon icon={faStar} /> {rev.rating}</p>
                 </div>
               </div>
               <p className="mt-3 text-black">{rev.comment}</p>
@@ -214,7 +217,7 @@ const MealDetails = () => {
         </button>
 
         {/* ====================== */}
-        {/* ⭐ Review Submission Box */}
+        {/*  Review Submission Box */}
         {/* ====================== */}
         {showReviewBox && (
           <div className="mt-5 bg-gray-100 p-5 rounded-lg shadow text-black">

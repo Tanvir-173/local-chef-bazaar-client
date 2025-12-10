@@ -2,12 +2,13 @@ import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Meals from './Meals/Meals';
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+import chef from '../../../assets/chef.jpg'
 
 
 const ReviewCard = ({ review }) => (
   <div className="bg-gray-100 p-4 rounded-lg shadow-sm text-black">
     <p className="font-semibold">{review.reviewerName}</p>
-     <p>Food:{review.foodName}</p>
+    <p>Food:{review.foodName}</p>
     <p>Rating: {review.rating} / 5</p>
     <p>{review.comment}</p>
   </div>
@@ -32,7 +33,7 @@ const Home = () => {
   return (
     <div className="space-y-16">
       {/* Hero Section */}
-      <motion.div 
+      {/* <motion.div 
         className="bg-green-600 text-white py-20 text-center"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -40,7 +41,20 @@ const Home = () => {
       >
         <h1 className="text-4xl font-bold mb-4">Welcome to LocalChefBazaar</h1>
         <p className="text-xl">Fresh, homemade meals delivered from local chefs to your door</p>
+      </motion.div> */}
+      <motion.div
+        className="text-white py-20 text-center bg-cover bg-center bg-no-repeat"
+        style={{ backgroundImage: `url(${chef})` }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+        <h1 className="text-4xl font-bold mb-4">Welcome to LocalChefBazaar</h1>
+        <p className="text-xl">
+          Fresh, homemade meals delivered from local chefs to your door
+        </p>
       </motion.div>
+
 
       {/* Daily Meals Section */}
       <section className="container mx-auto px-4">

@@ -3,6 +3,7 @@ import { Link, NavLink, useNavigate } from 'react-router';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../../../Firebase/firebase.init';
 import { AuthContext } from '../../../Context/AuthContext/AuthContext';
+import logo from "./chef-logo.png"
 
 const Navber = () => {
   const [userData, setUserData] = useState(null);
@@ -31,7 +32,7 @@ const Navber = () => {
       <div className="container mx-auto flex justify-between items-center p-4">
         {/* Logo */}
         <Link to="/" className="flex items-center space-x-2">
-          <img src="/logo.png" alt="Logo" className="w-10 h-10" />
+          <img src={ logo} alt="Logo" className="w-10 h-10" />
           <span className="font-bold text-xl">LocalChefBazaar</span>
         </Link>
 
@@ -100,7 +101,7 @@ const Navber = () => {
                 alt="User Avatar"
                 className="w-10 h-10 rounded-full border-2 border-yellow-500 cursor-pointer"
                 title="Go to Profile"
-                onClick={() => navigate('/profile')}
+                onClick={() => navigate('/dashboard/profile')}
               />
               <button
                 onClick={handleLogout}
