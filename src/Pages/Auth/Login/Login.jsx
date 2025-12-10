@@ -2,9 +2,11 @@ import React, { useContext } from "react";
 import { useForm } from "react-hook-form";
 import { AuthContext } from "../../../Context/AuthContext/AuthContext";
 import { useNavigate, useLocation } from "react-router";
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup, fetchSignInMethodsForEmail } from "firebase/auth";
 import { auth } from "../../../Firebase/firebase.init";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
+
+
 
 const Login = () => {
   const { signInUser } = useContext(AuthContext);
@@ -29,28 +31,90 @@ const Login = () => {
     }
   };
 
+  // const onSubmit = async (data) => {
+  //   try {
+  //     const result = await signInUser(data.email, data.password);
+  //     await saveUserToDB(result.user); // save logged-in user to DB
+  //     navigate(from, { replace: true });
+  //   } catch (error) {
+  //     console.error("Login Error:", error.message);
+  //     alert(error.message);
+  //   }
+  // };
+
+  // const handleGoogleLogin = async () => {
+  //   const provider = new GoogleAuthProvider();
+  //   try {
+  //     const result = await signInWithPopup(auth, provider);
+  //     await saveUserToDB(result.user); // save Google user to DB
+  //     navigate(from, { replace: true });
+  //   } catch (error) {
+  //     console.error("Google Login Error:", error.message);
+  //     alert(error.message);
+  //   }
+  // };
   const onSubmit = async (data) => {
     try {
+      // 1) Check how this email was registered
+      const methods = await fetchSignInMethodsForEmail(auth, data.email);
+
+      if (methods.includes("google.com") && !methods.includes("password")) {
+        alert("This email was created using Google. Please login with Google.");
+        return;
+      }
+
+      // 2) Login with email-password normally
       const result = await signInUser(data.email, data.password);
-      await saveUserToDB(result.user); // save logged-in user to DB
+
+      await saveUserToDB(result.user);
       navigate(from, { replace: true });
+
     } catch (error) {
-      console.error("Login Error:", error.message);
-      alert(error.message);
+      console.error("Login Error:", error.code);
+
+      if (error.code === "auth/invalid-credential") {
+        alert("Incorrect password.");
+      } else if (error.code === "auth/user-not-found") {
+        alert("No account found with this email.");
+      } else {
+        alert(error.message);
+      }
     }
   };
 
+
   const handleGoogleLogin = async () => {
     const provider = new GoogleAuthProvider();
+
     try {
+      // Attempt Google login
       const result = await signInWithPopup(auth, provider);
-      await saveUserToDB(result.user); // save Google user to DB
+      const googleUser = result.user;
+
+      // Save to DB and navigate
+      await saveUserToDB(googleUser);
       navigate(from, { replace: true });
+
     } catch (error) {
-      console.error("Google Login Error:", error.message);
-      alert(error.message);
+      if (error.code === "auth/account-exists-with-different-credential") {
+        // Email already exists with password
+        const pendingCred = GoogleAuthProvider.credentialFromError(error);
+        const email = error.customData.email;
+        console.log("Pending credential:", pendingCred);
+        console.log("Email:", email);
+
+        alert(`This email is already registered with email/password. Please login using email/password first.`);
+
+        // After the user logs in normally with email/password,
+        // you can link the Google credential like this:
+        // await linkWithPopup(auth.currentUser, provider);
+      } else {
+        console.error("Google Login Error:", error.message);
+        alert(error.message);
+      }
     }
   };
+
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -113,3 +177,4 @@ const Login = () => {
 };
 
 export default Login;
+
