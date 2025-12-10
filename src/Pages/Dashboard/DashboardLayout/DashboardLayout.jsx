@@ -10,6 +10,11 @@ const DashboardLayout = () => {
   const { user } = UseAuth();
   const axiosSecure = useAxiosSecure();
   const [menuOpen, setMenuOpen] = useState(false); // dropdown menu toggle for mobile
+  // Add a common "Home" link for all roles
+  // const commonLinks = [
+  //   { name: "Home", path: "/" } // path to your main home page
+  // ];
+
 
   // Fetch user info
   const { data: userInfo, isLoading } = useQuery({
@@ -31,18 +36,21 @@ const DashboardLayout = () => {
       { name: "My Orders", path: "orders" },
       { name: "My Review", path: "reviews" },
       { name: "Favorite Meals", path: "favorites" },
+      { name: "Home", path: "/" }
     ],
     chef: [
       { name: "My Profile", path: "profile" },
       { name: "Create Meal", path: "create-meal" },
       { name: "My Meals", path: "my-meals" },
       { name: "Order Requests", path: "order-requests" },
+       { name: "Home", path: "/" }
     ],
     admin: [
       { name: "My Profile", path: "profile" },
       { name: "Manage Users", path: "manage-users" },
       { name: "Manage Requests", path: "manage-requests" },
       { name: "Platform Statistics", path: "statistics" },
+       { name: "Home", path: "/" }
     ],
   };
 
