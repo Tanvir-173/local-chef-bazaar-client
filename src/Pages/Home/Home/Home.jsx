@@ -7,6 +7,7 @@ import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 const ReviewCard = ({ review }) => (
   <div className="bg-gray-100 p-4 rounded-lg shadow-sm text-black">
     <p className="font-semibold">{review.reviewerName}</p>
+     <p>Food:{review.foodName}</p>
     <p>Rating: {review.rating} / 5</p>
     <p>{review.comment}</p>
   </div>

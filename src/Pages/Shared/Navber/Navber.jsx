@@ -95,6 +95,7 @@ const Navber = () => {
           ) : (
             <div className="flex items-center space-x-3">
               <img
+                referrerPolicy="no-referrer"
                 src={userData.photoURL || 'https://i.ibb.co/4pDNDk1/avatar.png'}
                 alt="User Avatar"
                 className="w-10 h-10 rounded-full border-2 border-yellow-500 cursor-pointer"
