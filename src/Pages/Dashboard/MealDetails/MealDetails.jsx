@@ -140,18 +140,26 @@ const MealDetails = () => {
         alt={meal.foodName}
         className="w-full h-96 object-cover rounded-lg shadow mb-6"
       />
-
       <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-lg bg-white p-6 rounded-xl shadow text-black">
         <p><strong>Chef Name:</strong> {meal.chefName}</p>
         <p><strong>Chef ID:</strong> {meal.chefId}</p>
         <p><strong>Price:</strong> ${meal.price}</p>
-        <p><strong>Rating:</strong> <FontAwesomeIcon className="text-yellow-500" icon={faStar} /> {meal.rating}</p>
+        <p>
+          <strong>Rating:</strong>
+          <FontAwesomeIcon className="text-yellow-500 ml-1" icon={faStar} /> {meal.rating}
+        </p>
         <p><strong>Delivery Area:</strong> {meal.deliveryArea}</p>
         <p><strong>Estimated Delivery Time:</strong> {meal.estimatedTime} mins</p>
         <p><strong>Chef Experience:</strong> {meal.experience} years</p>
-        <p><strong>Ingredients:</strong> {Array.isArray(meal.ingredients) ? meal.ingredients.join(", ") : meal.ingredients}</p>
-        <p className="col-span-2"><strong>Description:</strong> {meal.description}</p>
+        <p>
+          <strong>Ingredients:</strong> {Array.isArray(meal.ingredients) ? meal.ingredients.join(", ") : meal.ingredients}
+        </p>
+        {/* Description takes full width on all screen sizes */}
+        <p className="md:col-span-2">
+          <strong>Description:</strong> {meal.description}
+        </p>
       </div>
+
 
       {/* Buttons */}
       <div className="mt-6 flex gap-4">
