@@ -40,7 +40,8 @@ const ManageRequests = () => {
         <p className="text-gray-600 text-black">No pending requests</p>
       )}
 
-      <div className="overflow-x-auto">
+      {/* Desktop Table */}
+      <div className="overflow-x-auto hidden md:block">
         <table className="min-w-full border border-gray-300">
           <thead className="bg-gray-100 text-black">
             <tr className="text-center">
@@ -64,22 +65,20 @@ const ManageRequests = () => {
                 </td>
                 <td className="px-4 py-2 border space-x-2">
                   <button
-                    className={`px-3 py-1 rounded text-white ${
-                      req.requestStatus === "pending"
+                    className={`px-3 py-1 rounded text-white ${req.requestStatus === "pending"
                         ? "bg-green-600 hover:bg-green-700"
                         : "bg-gray-400 cursor-not-allowed"
-                    }`}
+                      }`}
                     onClick={() => handleAction(req._id, "approve")}
                     disabled={req.requestStatus !== "pending"}
                   >
                     Approve
                   </button>
                   <button
-                    className={`px-3 py-1 rounded text-white ${
-                      req.requestStatus === "pending"
+                    className={`px-3 py-1 rounded text-white ${req.requestStatus === "pending"
                         ? "bg-red-600 hover:bg-red-700"
                         : "bg-gray-400 cursor-not-allowed"
-                    }`}
+                      }`}
                     onClick={() => handleAction(req._id, "reject")}
                     disabled={req.requestStatus !== "pending"}
                   >
@@ -91,8 +90,44 @@ const ManageRequests = () => {
           </tbody>
         </table>
       </div>
+
+      {/* Mobile Card View */}
+      <div className="md:hidden space-y-4">
+        {requests.map((req) => (
+          <div key={req._id} className="bg-white shadow p-4 rounded border border-gray-200">
+            <p><strong>Name:</strong> {req.userName || "N/A"}</p>
+            <p><strong>Email:</strong> {req.userEmail}</p>
+            <p><strong>Request Type:</strong> {req.requestType}</p>
+            <p><strong>Status:</strong> {req.requestStatus}</p>
+            <p><strong>Request Time:</strong> {new Date(req.requestTime).toLocaleString()}</p>
+            <div className="mt-2 flex space-x-2">
+              <button
+                className={`px-3 py-1 rounded text-white ${req.requestStatus === "pending"
+                    ? "bg-green-600 hover:bg-green-700"
+                    : "bg-gray-400 cursor-not-allowed"
+                  }`}
+                onClick={() => handleAction(req._id, "approve")}
+                disabled={req.requestStatus !== "pending"}
+              >
+                Approve
+              </button>
+              <button
+                className={`px-3 py-1 rounded text-white ${req.requestStatus === "pending"
+                    ? "bg-red-600 hover:bg-red-700"
+                    : "bg-gray-400 cursor-not-allowed"
+                  }`}
+                onClick={() => handleAction(req._id, "reject")}
+                disabled={req.requestStatus !== "pending"}
+              >
+                Reject
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
+
 
 export default ManageRequests;

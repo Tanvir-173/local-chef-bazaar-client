@@ -52,32 +52,77 @@ const CreateMeal = () => {
 
   return (
     <div className="max-w-3xl mx-auto bg-white p-6 rounded-xl shadow-lg">
-      <h2 className="text-2xl font-bold mb-6 text-black">Create New Meal</h2>
+      <h2 className="text-2xl font-bold mb-6 text-black text-center">Create New Meal</h2>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+        <input
+          {...register("foodName")}
+          placeholder="Food Name"
+          className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+          required
+        />
 
-        <input {...register("foodName")} placeholder="Food Name" className="input" required />
+        <input
+          {...register("chefName")}
+          placeholder="Chef Name"
+          className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+          required
+        />
 
-        <input {...register("chefName")} placeholder="Chef Name" className="input" required />
+        <input
+          type="file"
+          {...register("foodImage")}
+          className="w-full border p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+          required
+        />
 
-        <input type="file" {...register("foodImage")} className="file-input" required />
+        <input
+          type="number"
+          {...register("price")}
+          placeholder="Price"
+          className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+          required
+        />
 
-        <input type="number" {...register("price")} placeholder="Price" className="input" required />
+        <input
+          {...register("ingredients")}
+          placeholder="Ingredients (comma separated)"
+          className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+          required
+        />
 
-        <input {...register("ingredients")} placeholder="Ingredients (comma separated)" className="input" required />
+        <input
+          {...register("estimatedDeliveryTime")}
+          placeholder="Estimated Delivery Time"
+          className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+          required
+        />
 
-        <input {...register("estimatedDeliveryTime")} placeholder="Estimated Delivery Time" className="input" required />
+        <textarea
+          {...register("chefExperience")}
+          placeholder="Chef Experience"
+          className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+          required
+        />
 
-        <textarea {...register("chefExperience")} placeholder="Chef Experience" className="textarea" required />
+        <input
+          {...register("chefId")}
+          placeholder="Chef ID"
+          className="w-full border p-3 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+          required
+        />
 
-        <input {...register("chefId")} placeholder="Chef ID" className="input" required />
+        <input
+          value={user?.email}
+          readOnly
+          className="w-full border p-3 rounded-md bg-gray-100"
+        />
 
-        <input value={user?.email} readOnly className="input" />
-
-        <button className="btn btn-primary w-full">Create Meal</button>
+        <button className="w-full bg-green-600 text-white p-3 rounded-md hover:bg-green-700 transition">
+          Create Meal
+        </button>
       </form>
     </div>
   );
 };
-
 export default CreateMeal;
