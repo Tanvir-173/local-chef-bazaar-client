@@ -1,16 +1,52 @@
-# React + Vite
+# Local Chef Bazaar
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Project Purpose
+Local Chef Bazaar is a web application that connects users with local chefs, allowing them to order fresh, homemade meals directly to their doorstep. The platform supports multiple roles, including users, chefs, and admins, each with unique functionalities.
 
-Currently, two official plugins are available:
+## Live URL
+[https://local-chef-bazaar-9fed2.web.app/] 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+*(replace with your actual Firebase hosting URL)*
 
-## React Compiler
+## Key Features
+- **User Role**:
+  - Browse meals and place orders
+  - View order history and favorite meals
+  - Submit reviews
+- **Chef Role**:
+  - Create, update, and manage meals
+  - View incoming order requests
+  - Manage their profile
+- **Admin Role**:
+  - Manage users and requests
+  - View platform statistics
+- **Authentication**:
+  - Email/password login
+  - Google social login
+- **Responsive Design**:
+  - Fully functional on mobile and desktop
+- **Backend Integration**:
+  - Data stored in MongoDB
+  - Secure API requests using Axios and JWT
+- **Image Upload**:
+  - Meal and profile images via imgbb API
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Tech Stack / NPM Packages Used
+- **Frontend**:
+  - React.js, React Router, React Hook Form
+  - Tailwind CSS, Framer Motion
+  - React Hot Toast, React Icons
+- **Backend**:
+  - Node.js, Express.js
+  - MongoDB, Mongoose
+- **Authentication**:
+  - Firebase Authentication
+- **HTTP Requests**:
+  - Axios, useAxiosSecure (custom hook)
+- **State & Data Fetching**:
+  - React Query (`@tanstack/react-query`)
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Installation
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/Tanvir-173/local-chef-bazaar-client.git
