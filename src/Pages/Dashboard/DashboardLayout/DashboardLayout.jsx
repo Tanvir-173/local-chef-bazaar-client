@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Outlet, NavLink } from "react-router";
+import { Outlet, NavLink, useLocation } from "react-router";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 import UseAuth from "../../../Hooks/UseAuth";
 import { useQuery } from "@tanstack/react-query";
@@ -10,11 +10,7 @@ const DashboardLayout = () => {
   const { user } = UseAuth();
   const axiosSecure = useAxiosSecure();
   const [menuOpen, setMenuOpen] = useState(false); // dropdown menu toggle for mobile
-  // Add a common "Home" link for all roles
-  // const commonLinks = [
-  //   { name: "Home", path: "/" } // path to your main home page
-  // ];
-
+  const location = useLocation(); // get current path
 
   // Fetch user info
   const { data: userInfo, isLoading } = useQuery({
@@ -43,20 +39,23 @@ const DashboardLayout = () => {
       { name: "Create Meal", path: "create-meal" },
       { name: "My Meals", path: "my-meals" },
       { name: "Order Requests", path: "order-requests" },
-       { name: "Home", path: "/" }
+      { name: "Home", path: "/" }
     ],
     admin: [
       { name: "My Profile", path: "profile" },
       { name: "Manage Users", path: "manage-users" },
       { name: "Manage Requests", path: "manage-requests" },
       { name: "Platform Statistics", path: "statistics" },
-       { name: "Home", path: "/" }
+      { name: "Home", path: "/" }
     ],
   };
 
+  // Determine if we are on the default dashboard route
+  const isDashboardHome = location.pathname === "/dashboard";
+
   return (
     <div className="min-h-screen bg-gray-100">
-      {/* Top bar */}
+      {/* Top bar for mobile */}
       <header className="flex justify-between items-center bg-gray-900 text-white p-4 md:hidden">
         <h1 className="text-xl font-bold">Dashboard</h1>
         <button onClick={() => setMenuOpen(!menuOpen)}>
@@ -109,7 +108,18 @@ const DashboardLayout = () => {
         {/* Main content */}
         <main className="flex-1 p-4 md:p-6">
           <Toaster position="top-right" reverseOrder={false} />
-          <Outlet />
+          
+          {/* Show welcome message if on default dashboard route */}
+          {isDashboardHome ? (
+            <div className="flex items-center justify-center h-full">
+              <h2 className="text-3xl font-bold text-gray-700 text-center">
+                Welcome to Dashboard! <br />
+                Please select an activity.
+              </h2>
+            </div>
+          ) : (
+            <Outlet />
+          )}
         </main>
       </div>
     </div>
