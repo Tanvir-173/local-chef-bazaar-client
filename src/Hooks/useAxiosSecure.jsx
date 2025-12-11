@@ -5,51 +5,51 @@ import { useNavigate } from 'react-router';
 import UseAuth from './UseAuth';
 
 const axiosSecure = axios.create({
-    baseURL:'https://local-chef-bazaar.vercel.app'
+    baseURL: 'https://local-chef-bazaar.vercel.app'
 })
 
 const useAxiosSecure = () => {
 
-    const {user, logOut}=UseAuth()
+    const { user, logOut } = UseAuth()
     const navigate = useNavigate()
 
-    useEffect(() =>{
-        
+    useEffect(() => {
 
-         const reqInterceptor = axiosSecure.interceptors.request.use(config=>{
-            config.headers.Authorization =`Bearer ${user?.accessToken}`
+
+        const reqInterceptor = axiosSecure.interceptors.request.use(config => {
+            config.headers.Authorization = `Bearer ${user?.accessToken}`
             return config
 
-         })
-          
-          const resInterceptor= axiosSecure.interceptors.response.use((response)=>{
+        })
+
+        const resInterceptor = axiosSecure.interceptors.response.use((response) => {
 
             return response
-          },(error)=>{
+        }, (error) => {
 
-              console.log(error)
-              const statusCode = error.status
-              if(statusCode === 401 || statusCode === 403){
-                  logOut()
-                  .then(()=>{
-                      navigate('/login')  
-                  })
+            console.log(error)
+            const statusCode = error.status
+            if (statusCode === 401 || statusCode === 403) {
+                logOut()
+                    .then(() => {
+                        navigate('/login')
+                    })
 
-              }
-              return Promise.reject(error)
-          })
+            }
+            return Promise.reject(error)
+        })
 
-         
-          return () =>{
+
+        return () => {
             axiosSecure.interceptors.request.eject(reqInterceptor)
             axiosSecure.interceptors.request.eject(resInterceptor)
-          }
+        }
     },
-    [user,logOut,navigate])
+        [user, logOut, navigate])
 
-    
+
     return axiosSecure
-      
+
 };
 
 export default useAxiosSecure;

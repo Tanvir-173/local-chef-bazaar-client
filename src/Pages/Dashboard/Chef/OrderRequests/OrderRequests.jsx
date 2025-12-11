@@ -7,7 +7,6 @@ import useAxiosSecure from "../../../../Hooks/useAxiosSecure";
 
 const OrderRequests = () => {
   const { user } = UseAuth();
-  console.log(user)
   const { userInfo, isLoading } = UserInfo();
   const axiosSecure = useAxiosSecure();
 
@@ -36,10 +35,17 @@ const OrderRequests = () => {
   }
 
   // ===============================
-  // Handle Status Update
+  // Handle Status Update + Delivery Time
   // ===============================
   const handleStatusChange = async (orderId, newStatus) => {
-    await axiosSecure.patch(`/orders/${orderId}`, { orderStatus: newStatus });
+    const updateData = { orderStatus: newStatus };
+
+    // When delivered → add deliveryTime
+    if (newStatus === "delivered") {
+      updateData.deliveryTime = new Date();
+    }
+
+    await axiosSecure.patch(`/orders/${orderId}`, updateData);
 
     Swal.fire("Success!", `Order ${newStatus}`, "success");
     refetch();
@@ -82,6 +88,11 @@ const OrderRequests = () => {
             <p><strong>Order Time:</strong> {new Date(order.orderTime).toLocaleString()}</p>
             <p><strong>User Address:</strong> {order.userAddress}</p>
             <p><strong>Payment:</strong> {order.paymentStatus}</p>
+
+            {/* Show Delivery Time if exists */}
+            {order.deliveryTime && (
+              <p><strong>Delivery Time:</strong> {new Date(order.deliveryTime).toLocaleString()}</p>
+            )}
           </div>
 
           {/* Buttons */}

@@ -1,33 +1,26 @@
-import React, { useState } from "react";
+import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import UseAuth from "../../../Hooks/UseAuth";
 import useAxiosSecure from "../../../Hooks/useAxiosSecure";
 
-// =====================
-// MAIN ORDER PAGE
-// =====================
-const Myorders = () => {
+const MyOrders = () => {
   const { user } = UseAuth();
   const axiosSecure = useAxiosSecure();
-  const [selectedOrder, setSelectedOrder] = useState(null);
 
-  // Fetch all orders (paid and pending)
+  // Fetch all orders (paid and pending) for this user
   const { data: orders = [], isLoading, refetch } = useQuery({
     queryKey: ["orders", user?.email],
     queryFn: async () => {
-      const res = await axiosSecure.get(`/orders/${user?.email}`);
-      return res.data; // Return all orders
+      if (!user?.email) return [];
+      const res = await axiosSecure.get(`/orders/${user.email}`);
+      return res.data;
     },
     enabled: !!user?.email,
   });
 
   // Handle payment
   const handlePayment = async (order) => {
-    console.log("ORDER:", order);
-    console.log("PRICE:", order.price);
-    console.log("FOODNAME:", order.foodName);
-
     try {
       const res = await axiosSecure.post("/create-checkout-session", {
         price: order.price,
@@ -35,7 +28,7 @@ const Myorders = () => {
         userEmail: order.userEmail,
       });
 
-      console.log(res.data);
+      // Redirect to payment page
       window.location.href = res.data.url;
     } catch (error) {
       console.error("Payment Error:", error);
@@ -47,7 +40,13 @@ const Myorders = () => {
     }
   };
 
-  if (isLoading) return <p className="text-center">Loading...</p>;
+  if (isLoading)
+    return (
+      <p className="text-center mt-10 text-black">Loading your orders...</p>
+    );
+
+  if (orders.length === 0)
+    return <p className="text-center mt-10 text-black">No orders found.</p>;
 
   return (
     <div className="max-w-5xl mx-auto p-6">
@@ -63,11 +62,10 @@ const Myorders = () => {
               order.paymentStatus === "paid" ? "bg-green-100" : "bg-white"
             }`}
           >
-            {console.log(order)}
-            <h3 className="text-xl font-bold">{order.foodName}</h3>
+            <h3 className="text-xl font-bold mb-2">{order.mealName}</h3>
 
             <p>
-              <strong>Status:</strong> {order.status}
+              <strong>Status:</strong> {order.orderStatus}
             </p>
             <p>
               <strong>Price:</strong> ${order.price}
@@ -76,8 +74,16 @@ const Myorders = () => {
               <strong>Quantity:</strong> {order.quantity}
             </p>
             <p>
-              <strong>Delivery Time:</strong> {order.deliveryTime}
+              <strong>Order Time:</strong> {order.orderTime}
             </p>
+
+            <p>
+              <strong>Delivery Time:</strong>{" "}
+              {order.deliveryTime
+                ? new Date(order.deliveryTime).toLocaleString()
+                : "Not delivered yet"}
+            </p>
+
             <p>
               <strong>Chef Name:</strong> {order.chefName}
             </p>
@@ -87,9 +93,13 @@ const Myorders = () => {
             <p>
               <strong>Payment Status:</strong> {order.paymentStatus}
             </p>
+            <p>
+              <strong>Delivery Address:</strong> {order.userAddress}
+            </p>
 
             {/* CONDITIONAL PAYMENT BUTTON */}
-            {order.orderStatus === "accepted" && order.paymentStatus === "Pending" ? (
+            {order.orderStatus === "accepted" &&
+            order.paymentStatus === "Pending" ? (
               <button
                 className="mt-4 w-full bg-green-600 py-2 rounded text-white hover:bg-green-700 transition"
                 onClick={() => handlePayment(order)}
@@ -111,4 +121,4 @@ const Myorders = () => {
   );
 };
 
-export default Myorders;
+export default MyOrders;
