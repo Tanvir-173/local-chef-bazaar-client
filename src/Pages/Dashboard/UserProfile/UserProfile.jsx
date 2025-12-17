@@ -19,29 +19,68 @@ const UserProfile = () => {
   });
 
   // Send role request
+  // const handleRequestRole = async (roleType) => {
+  //   try {
+  //     const requestData = {
+  //       //_id: userInfo?._id,              // REQUIRED
+  //       userName: userInfo?.name,
+  //       userEmail: userInfo?.email,
+  //       requestType: roleType,          // chef or admin
+  //       requestStatus: "pending",       // always pending
+  //       requestTime: new Date().toISOString(), // exact time
+  //     };
+
+  //     await axiosSecure.post("/role-request", requestData);
+
+  //     Swal.fire(
+  //       "Success!",
+  //       `Your request to become a ${roleType} has been sent!`,
+  //       "success"
+  //     );
+  //   } catch (err) {
+  //     Swal.fire("Error!", "Failed to send request.", "error");
+  //     console.log(err);
+  //   }
+  // };
   const handleRequestRole = async (roleType) => {
     try {
       const requestData = {
-        //_id: userInfo?._id,              // REQUIRED
         userName: userInfo?.name,
         userEmail: userInfo?.email,
-        requestType: roleType,          // chef or admin
-        requestStatus: "pending",       // always pending
-        requestTime: new Date().toISOString(), // exact time
+        requestType: roleType, // chef or admin
       };
 
-      await axiosSecure.post("/role-request", requestData);
+      const res = await axiosSecure.post("/role-request", requestData);
 
-      Swal.fire(
-        "Success!",
-        `Your request to become a ${roleType} has been sent!`,
-        "success"
-      );
+      if (res.data.success) {
+        Swal.fire(
+          "Success!",
+          `Your request to become a ${roleType} has been sent!`,
+          "success"
+        );
+      }
     } catch (err) {
-      Swal.fire("Error!", "Failed to send request.", "error");
-      console.log(err);
+      //  User already made request (expected case)
+      if (err.response?.status === 409) {
+        Swal.fire(
+          "Already Requested",
+          err.response.data?.message || "You already sent a role request",
+          "info"
+        );
+        return;
+      }
+
+      //  Real error
+      Swal.fire(
+        "Error!",
+        "Failed to send request. Please try again later.",
+        "error"
+      );
+
+      console.error(err);
     }
   };
+
 
   if (isLoading) return <p className="text-center mt-10">Loading...</p>;
   if (!userInfo) return <p className="text-center mt-10">User data not found</p>;
