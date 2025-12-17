@@ -29,6 +29,7 @@ const Home = () => {
     };
     fetchTopReviews();
   }, [axiosSecure]);
+  console.log(reviews)
 
   return (
     <div className="space-y-16">

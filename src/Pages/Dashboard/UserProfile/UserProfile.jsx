@@ -22,7 +22,7 @@ const UserProfile = () => {
   const handleRequestRole = async (roleType) => {
     try {
       const requestData = {
-        _id: userInfo?._id,              // REQUIRED
+        //_id: userInfo?._id,              // REQUIRED
         userName: userInfo?.name,
         userEmail: userInfo?.email,
         requestType: roleType,          // chef or admin
